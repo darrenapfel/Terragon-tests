@@ -128,15 +128,15 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
-  
+
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
-  
+
   .animate-slide-in-up {
     animation: slideInUp 0.5s ease-out;
   }
-  
+
   .animate-bounce-subtle {
     animation: bounceSubtle 2s ease-in-out infinite;
   }
