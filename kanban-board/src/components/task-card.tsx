@@ -12,7 +12,8 @@ import {
   Zap,
   FileText,
   Wrench,
-  Book
+  Book,
+  Copy
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { 
@@ -53,9 +54,63 @@ function formatDate(date: Date): string {
   }).format(date)
 }
 
+function formatTaskAsMarkdown(task: Task): string {
+  const lines: string[] = []
+  
+  lines.push(`# ${task.title}`)
+  lines.push('')
+  
+  if (task.description) {
+    lines.push(task.description)
+    lines.push('')
+  }
+  
+  lines.push('## Details')
+  lines.push('')
+  lines.push(`- **Type**: ${task.type}`)
+  lines.push(`- **Priority**: ${task.priority}`)
+  lines.push(`- **Status**: ${task.status}`)
+  
+  if (task.assignee) {
+    lines.push(`- **Assignee**: ${task.assignee}`)
+  }
+  
+  if (task.dueDate) {
+    lines.push(`- **Due Date**: ${task.dueDate.toLocaleDateString()}`)
+  }
+  
+  if (task.tags && task.tags.length > 0) {
+    lines.push(`- **Tags**: ${task.tags.join(', ')}`)
+  }
+  
+  lines.push('')
+  lines.push(`- **Created**: ${task.createdAt.toLocaleDateString()}`)
+  lines.push(`- **Updated**: ${task.updatedAt.toLocaleDateString()}`)
+  
+  return lines.join('\n')
+}
+
+async function copyToClipboard(text: string): Promise<void> {
+  try {
+    await navigator.clipboard.writeText(text)
+  } catch {
+    const textArea = document.createElement('textarea')
+    textArea.value = text
+    document.body.appendChild(textArea)
+    textArea.select()
+    document.execCommand('copy')
+    document.body.removeChild(textArea)
+  }
+}
+
 export function TaskCard({ task, index }: TaskCardProps) {
   const TypeIcon = TYPE_ICONS[task.type]
   const isOverdue = task.dueDate && task.dueDate < new Date() && task.status !== 'done'
+  
+  const handleCopyAsMarkdown = async () => {
+    const markdown = formatTaskAsMarkdown(task)
+    await copyToClipboard(markdown)
+  }
 
   return (
     <Draggable draggableId={task.id} index={index}>
@@ -102,6 +157,10 @@ export function TaskCard({ task, index }: TaskCardProps) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={handleCopyAsMarkdown}>
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy as Markdown
+                  </DropdownMenuItem>
                   <DropdownMenuItem>Edit</DropdownMenuItem>
                   <DropdownMenuItem>Duplicate</DropdownMenuItem>
                   <DropdownMenuItem className="text-red-600">Delete</DropdownMenuItem>
