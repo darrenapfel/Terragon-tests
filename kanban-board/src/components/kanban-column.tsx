@@ -5,14 +5,17 @@ import { Column, Task } from '@/types/kanban'
 import { TaskCard } from './task-card'
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
 import { Badge } from './ui/badge'
+import { Button } from './ui/button'
+import { Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface KanbanColumnProps {
   column: Column
   tasks: Task[]
+  onAddTask: (columnId: string) => void
 }
 
-export function KanbanColumn({ column, tasks }: KanbanColumnProps) {
+export function KanbanColumn({ column, tasks, onAddTask }: KanbanColumnProps) {
   return (
     <div className="flex-shrink-0 w-80 animate-slide-in-up">
       <Card className={cn(
@@ -31,6 +34,15 @@ export function KanbanColumn({ column, tasks }: KanbanColumnProps) {
               {tasks.length}
             </Badge>
           </CardTitle>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="w-full mt-2 border-2 border-dashed border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 hover:bg-white/50 dark:hover:bg-slate-700/50 text-slate-600 dark:text-slate-400"
+            onClick={() => onAddTask(column.id)}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add task
+          </Button>
         </CardHeader>
         <CardContent className="pt-0">
           <Droppable droppableId={column.id}>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { DragDropContext, DropResult } from '@hello-pangea/dnd'
-import { KanbanBoard as KanbanBoardType, Task, DEFAULT_COLUMNS } from '@/types/kanban'
+import { KanbanBoard as KanbanBoardType, Task, TaskStatus, DEFAULT_COLUMNS } from '@/types/kanban'
 import { KanbanColumn } from './kanban-column'
 import { TaskDialog } from './task-dialog'
 import { Button } from './ui/button'
@@ -87,6 +87,7 @@ const INITIAL_BOARD: KanbanBoardType = {
 export function KanbanBoard() {
   const [board, setBoard] = useState<KanbanBoardType>(INITIAL_BOARD)
   const [isTaskDialogOpen, setIsTaskDialogOpen] = useState(false)
+  const [selectedColumnId, setSelectedColumnId] = useState<string | null>(null)
 
   useEffect(() => {
     const savedBoard = localStorage.getItem('kanban-board')
@@ -199,10 +200,15 @@ export function KanbanBoard() {
       },
       columns: prev.columns.map(col =>
         col.id === taskData.status
-          ? { ...col, taskIds: [...col.taskIds, newTask.id] }
+          ? { ...col, taskIds: [newTask.id, ...col.taskIds] }
           : col
       )
     }))
+  }
+
+  const handleAddTaskToColumn = (columnId: string) => {
+    setSelectedColumnId(columnId)
+    setIsTaskDialogOpen(true)
   }
 
   return (
@@ -233,6 +239,7 @@ export function KanbanBoard() {
                 key={column.id}
                 column={column}
                 tasks={column.taskIds.map(taskId => board.tasks[taskId])}
+                onAddTask={handleAddTaskToColumn}
               />
             ))}
           </div>
@@ -240,8 +247,12 @@ export function KanbanBoard() {
 
         <TaskDialog
           open={isTaskDialogOpen}
-          onOpenChange={setIsTaskDialogOpen}
+          onOpenChange={(open) => {
+            setIsTaskDialogOpen(open)
+            if (!open) setSelectedColumnId(null)
+          }}
           onSave={handleCreateTask}
+          initialStatus={selectedColumnId as TaskStatus || 'todo'}
         />
       </div>
     </div>
