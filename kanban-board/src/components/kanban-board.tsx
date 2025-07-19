@@ -232,7 +232,7 @@ export function KanbanBoard() {
       </div>
 
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex gap-6 overflow-x-auto flex-1 p-6 pt-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 flex-1 p-6 pt-0 overflow-hidden">
           {board.columns.map(column => (
             <KanbanColumn
               key={column.id}

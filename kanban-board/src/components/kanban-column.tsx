@@ -17,7 +17,7 @@ interface KanbanColumnProps {
 
 export function KanbanColumn({ column, tasks, onAddTask }: KanbanColumnProps) {
   return (
-    <div className="flex-shrink-0 w-80 h-full animate-slide-in-up">
+    <div className="h-full animate-slide-in-up min-w-0">
       <Card className={cn(
         "h-full border-0 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col",
         column.color
