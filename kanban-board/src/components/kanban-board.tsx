@@ -206,44 +206,42 @@ export function KanbanBoard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-8 animate-slide-in-up">
-          <div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2 animate-float">
-              {board.title}
-            </h1>
-            <p className="text-slate-600 dark:text-slate-400">
-              Track features, bugs, and tasks with beautiful Kanban boards
-            </p>
-          </div>
-          <Button 
-            className="bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-all duration-200 animate-bounce-subtle"
-            onClick={() => setIsTaskDialogOpen(true)}
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Task
-          </Button>
+    <div className="h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 flex flex-col">
+      <div className="flex items-center justify-between p-6 flex-shrink-0 animate-slide-in-up">
+        <div>
+          <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-2 animate-float">
+            {board.title}
+          </h1>
+          <p className="text-slate-600 dark:text-slate-400">
+            Track features, bugs, and tasks with beautiful Kanban boards
+          </p>
         </div>
-
-        <DragDropContext onDragEnd={onDragEnd}>
-          <div className="flex gap-6 overflow-x-auto pb-6">
-            {board.columns.map(column => (
-              <KanbanColumn
-                key={column.id}
-                column={column}
-                tasks={column.taskIds.map(taskId => board.tasks[taskId])}
-              />
-            ))}
-          </div>
-        </DragDropContext>
-
-        <TaskDialog
-          open={isTaskDialogOpen}
-          onOpenChange={setIsTaskDialogOpen}
-          onSave={handleCreateTask}
-        />
+        <Button 
+          className="bg-blue-600 hover:bg-blue-700 hover:scale-105 transition-all duration-200 animate-bounce-subtle"
+          onClick={() => setIsTaskDialogOpen(true)}
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          Add Task
+        </Button>
       </div>
+
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className="flex gap-6 overflow-x-auto flex-1 p-6 pt-0">
+          {board.columns.map(column => (
+            <KanbanColumn
+              key={column.id}
+              column={column}
+              tasks={column.taskIds.map(taskId => board.tasks[taskId])}
+            />
+          ))}
+        </div>
+      </DragDropContext>
+
+      <TaskDialog
+        open={isTaskDialogOpen}
+        onOpenChange={setIsTaskDialogOpen}
+        onSave={handleCreateTask}
+      />
     </div>
   )
 }

@@ -14,12 +14,12 @@ interface KanbanColumnProps {
 
 export function KanbanColumn({ column, tasks }: KanbanColumnProps) {
   return (
-    <div className="flex-shrink-0 w-80 animate-slide-in-up">
+    <div className="flex-shrink-0 w-80 h-full animate-slide-in-up">
       <Card className={cn(
-        "h-full border-0 shadow-sm hover:shadow-md transition-all duration-300",
+        "h-full border-0 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col",
         column.color
       )}>
-        <CardHeader className="pb-3">
+        <CardHeader className="pb-3 flex-shrink-0">
           <CardTitle className="flex items-center justify-between text-lg font-semibold">
             <span className="text-slate-700 dark:text-slate-200">
               {column.title}
@@ -32,14 +32,14 @@ export function KanbanColumn({ column, tasks }: KanbanColumnProps) {
             </Badge>
           </CardTitle>
         </CardHeader>
-        <CardContent className="pt-0">
+        <CardContent className="pt-0 flex-1 flex flex-col">
           <Droppable droppableId={column.id}>
             {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 className={cn(
-                  "min-h-[200px] space-y-3 p-2 rounded-lg transition-all duration-300 ease-in-out",
+                  "flex-1 space-y-3 p-2 rounded-lg transition-all duration-300 ease-in-out",
                   snapshot.isDraggingOver && "bg-white/30 dark:bg-slate-700/30 scale-[1.02] ring-2 ring-blue-300 dark:ring-blue-600"
                 )}
               >
